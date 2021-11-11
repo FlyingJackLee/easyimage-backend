@@ -25,5 +25,4 @@ public class InternationalizationConfiguration {
         return messageSource;
     }
 
-
 }

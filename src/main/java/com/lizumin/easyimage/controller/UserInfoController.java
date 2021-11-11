@@ -1,9 +1,11 @@
 package com.lizumin.easyimage.controller;
 
-import com.lizumin.easyimage.mapper.AccountRepository;
-import com.lizumin.easyimage.model.entity.Account;
+import com.lizumin.easyimage.Dao.UserRepository;
+import com.lizumin.easyimage.model.entity.User;
+import com.lizumin.easyimage.model.entity.UserProfile;
 
 
+import com.lizumin.easyimage.service.intf.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,37 +17,34 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(path = "/api/user")
 public class UserInfoController {
-    private AccountRepository accountRepository;
+    private UserRepository userRepository;
+    private UserDao userDao;
 
-    @PostMapping("/create")
-    public @ResponseBody String createAccount
+    @PostMapping("/register")
+    public @ResponseBody User createAccount
             (@RequestParam(name = "username",required = true) String username,
-             @RequestParam(name = "password",required = true) String password,
-             @RequestParam(name = "email",required = true) String email
+             @RequestParam(name = "password",required = true) String password
              ){
 
-        Account user = new Account();
-        user.setEmail(email);
-        user.setUsername(username);
-        user.setPassword(password);
-
-        System.out.println(user);
-
-        accountRepository.save(user);
-        return "Done";
+        return userDao.createUser(username,password);
     }
+//
+//    @GetMapping("/{id}/profile")
+//    public UserProfile findByEmail(@RequestParam(value = "value") String email){
+//       return accountRepository.findAccountByEmail(email);
+//    }
+//    @GetMapping("/find/id")
+//    public UserProfile findById(@RequestParam(value = "value") long id){
+//        return accountRepository.findAccountByUserid(id);
+//    }
 
-    @GetMapping("/find/email")
-    public Account findByEmail(@RequestParam(value = "value") String email){
-       return accountRepository.findAccountByEmail(email);
-    }
-    @GetMapping("/find/id")
-    public Account findById(@RequestParam(value = "value") long id){
-        return accountRepository.findAccountByUserid(id);
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Autowired
-    public void setAccountRepository(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
     }
 }

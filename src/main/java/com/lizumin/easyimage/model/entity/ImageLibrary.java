@@ -23,7 +23,7 @@ public class ImageLibrary {
     private List<LabelImage> labelImages;
 
     @ManyToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
+    @JoinColumn(name = "user_id")
+    private UserProfile userProfile;
 
 }
