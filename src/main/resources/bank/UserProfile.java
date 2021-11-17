@@ -1,5 +1,7 @@
-package com.lizumin.easyimage.model.entity;
+package bank;
 
+import com.lizumin.easyimage.model.entity.ImageLibrary;
+import com.lizumin.easyimage.model.entity.User;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -42,6 +44,10 @@ public class UserProfile {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
 

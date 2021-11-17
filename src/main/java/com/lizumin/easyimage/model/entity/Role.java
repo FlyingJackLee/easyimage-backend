@@ -1,9 +1,7 @@
 package com.lizumin.easyimage.model.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Set;
 
 /**
  * 2 * @Author: Zumin Li
@@ -15,7 +13,17 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
     private String name;
+
+    @Column
+    private String description;
+
+    @ElementCollection(targetClass = String.class)
+    @JoinTable(name = "roles_permission")
+    private Set<String> permissions;
+
 
     public Long getId() {
         return id;
@@ -34,4 +42,7 @@ public class Role {
         this.id = id;
     }
 
+    public Set<String> getPermissions() {
+        return permissions;
+    }
 }

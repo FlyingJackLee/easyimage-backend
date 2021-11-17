@@ -21,4 +21,13 @@ public interface UserRepository extends JpaRepository<User,Integer> {
      User findUserByUsername(String username);
 
 
+     /**
+      *
+      * find an account in db by id
+      *
+      * @param id
+      * @return com.lizumin.easyimage.model.entity.User TODO
+      */
+     User findUserById(long id);
+
 }

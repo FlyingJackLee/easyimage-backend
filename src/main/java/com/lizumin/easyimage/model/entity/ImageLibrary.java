@@ -1,5 +1,6 @@
 package com.lizumin.easyimage.model.entity;
 
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -24,6 +25,6 @@ public class ImageLibrary {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private UserProfile userProfile;
+    private User user;
 
 }
