@@ -12,11 +12,11 @@ public class JwtAuthenticationException extends RuntimeException {
 
     public JwtAuthenticationException(String msg){
         super(msg);
-        this.restData = RestData.fail("msg");
+        this.restData = RestData.fail(msg);
     }
     public JwtAuthenticationException(){
         super();
-        this.restData = RestData.fail("msg");
+        this.restData = RestData.fail();
     }
 
     public RestData getRestData() {

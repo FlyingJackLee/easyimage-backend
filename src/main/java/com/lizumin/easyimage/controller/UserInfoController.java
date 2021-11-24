@@ -5,6 +5,8 @@ import com.lizumin.easyimage.Dao.UserRepository;
 import com.lizumin.easyimage.annos.RequiredJwtToken;
 import com.lizumin.easyimage.config.jwt.JtwToken;
 import com.lizumin.easyimage.config.jwt.JtwUtil;
+import com.lizumin.easyimage.config.jwt.JwtAuthenticationException;
+import com.lizumin.easyimage.constant.enums.JWTSetting;
 import com.lizumin.easyimage.model.entity.User;
 
 
@@ -12,6 +14,8 @@ import com.lizumin.easyimage.service.impl.JwtDaoImpl;
 import com.lizumin.easyimage.service.intf.JwtCacheDao;
 import com.lizumin.easyimage.service.intf.UserDao;
 import com.lizumin.easyimage.utils.RandomUtil;
+import com.lizumin.easyimage.utils.RestDataUtil;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import net.bytebuddy.utility.RandomString;
 import org.apache.catalina.security.SecurityUtil;
@@ -34,6 +38,7 @@ import java.util.Locale;
  * 4
  */
 @RestController
+@CrossOrigin(origins = "http://127.0.0.1:4200", maxAge = 3600)
 @RequestMapping(path = "/api/user")
 public class UserInfoController {
     private UserRepository userRepository;
@@ -44,26 +49,32 @@ public class UserInfoController {
     @Operation(summary = "Create user ",description =
             "Register a new user by username,password amd EMail. " +
                     "Also, locale filed, which is not a required filed(default is EN) , points out the locale of the user")
-    @PostMapping("/register")
-    public @ResponseBody User createAccount
-            (@RequestParam(name = "username",required = true) String username,
-             @RequestParam(name = "password",required = true) String password,
-             @RequestParam(name = "email",required = true) String email,
-             @RequestParam(name = "locale",required = false)Locale locale
-             ){
+    @PostMapping("/signup")
+    public  @ResponseBody RestData createAccount
+            (@RequestBody(required = true) RestData requestData){
 
-        return userDao.createUser(username,password,email,locale);
+        String username = RestDataUtil.getKeyData(requestData,"username");
+        String password = RestDataUtil.getKeyData(requestData,"password");
+        String email = RestDataUtil.getKeyData(requestData,"email");
+
+        User user =  userDao.createUser(username,password,email,Locale.ENGLISH);
+
+        return user != null ? RestData.success("Sign Up complete"): RestData.fail("Sign Up failed");
+
     }
 
 
     @PostMapping("/login")
-    public @ResponseBody RestData login(@RequestParam(name = "username",required = true) String username,
-                                        @RequestParam(name = "password",required = true) String password){
-        RestData response =  null;
+    public @ResponseBody RestData login(@RequestBody(required = true) RestData requestData){
+
+        String username = RestDataUtil.getKeyData(requestData,"username");
+        String password = RestDataUtil.getKeyData(requestData,"password");
 
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username,password);
 
         Subject currentUser = SecurityUtils.getSubject();
+
+        RestData response =  null;
 
         try {
             currentUser.login(usernamePasswordToken);
@@ -86,6 +97,75 @@ public class UserInfoController {
 
         return response;
     }
+
+    @PostMapping("/logout")
+    @RequiredJwtToken
+    public @ResponseBody RestData logout(@RequestBody(required = true) RestData requestData){
+        String token = RestDataUtil.getKeyData(requestData,"token");
+        String username = RestDataUtil.getKeyData(requestData,"username");
+
+        if ( token == null || username == null || "".equals(token) || "".equals(username) ){
+            return RestData.fail("Invalid token.");
+        }
+
+        //Prevent malicious logout, check token before logout
+        if (JtwUtil.verify(token,this.jwtCacheDao.getSecrectKey(username))){
+            this.jwtCacheDao.deleteToken(username);
+            return RestData.success("you have logged out");
+        }
+        else {
+            return RestData.fail("Bad token.");
+        }
+    }
+
+
+    @PostMapping("/find_by_username")
+    public @ResponseBody RestData findByUsername(@RequestBody(required = true) RestData requestData){
+
+        String username = RestDataUtil.getKeyData(requestData,"username");
+
+        User user =  this.userRepository.findUserByUsername(username);
+
+        if (user != null){
+            return RestData.success("Username has been used");
+        }
+        else {
+            return RestData.fail("Username is available");
+        }
+    }
+
+
+    @GetMapping("/check")
+    @RequiredJwtToken
+    public @ResponseBody RestData checkToken(@RequestHeader(value = JWTSetting.TOKEN_HEADER,required = true) String token){
+        return RestData.success("Right token");
+    }
+
+//  @PostMapping("/check_token")
+//    public @ResponseBody RestData checkToken(@RequestBody(required = true) RestData requestData){
+//        RestData response = null;
+//
+//        String token = RestDataUtil.getKeyData(requestData,"token");
+//        String username = RestDataUtil.getKeyData(requestData,"username");
+//
+//        if ( token == null || username == null || "".equals(token) || "".equals(username) ){
+//            return RestData.fail("Invalid token.");
+//        }
+//
+//        boolean isJwtTokenAvailable = this.jwtCacheDao.isJwtTokenAvailable(username);
+//
+//        if (isJwtTokenAvailable && this.jwtCacheDao.getSecrectKey(username).equals(token.trim())){
+//            RestData.success("Valid Token");
+//            response.add("expire_time",300);
+//        }
+//        else {
+//            response = RestData.fail("Invalid token.");
+//        }
+//
+//        return response;
+//    }
+
+
 
     @GetMapping("/hello")
     @RequiredJwtToken

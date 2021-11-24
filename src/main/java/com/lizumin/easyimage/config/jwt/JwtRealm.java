@@ -73,15 +73,17 @@ public class JwtRealm extends AuthorizingRealm {
         //check if there is a jwt token cache relating to the user.
         if (jwtCacheDao.isJwtTokenAvailable(username)){
             String key = jwtCacheDao.getSecrectKey(username);
-           if (JtwUtil.verify(jwtToken,key)){
+            if (JtwUtil.verify(jwtToken,key)){
+                this.jwtCacheDao.refreshToken(username);
                 return new SimpleAuthenticationInfo(username,jwtToken,getName());
            }
+           else {
+                throw new JwtAuthenticationException("Bad Authentication.");
+            }
         }
         else {
             throw new JwtAuthenticationException("No Authentication, please login.");
         }
-
-        return null;
     }
 
     @Override

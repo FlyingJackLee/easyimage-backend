@@ -20,6 +20,7 @@ public interface JwtCacheDao {
     public boolean isJwtTokenAvailable(String username);
 
 
+
     /**
      *
      * delete the token cache
@@ -52,4 +53,12 @@ public interface JwtCacheDao {
      * @param  username
      */
     public void storeJwt(String username,String token);
+
+//    /**
+//     *
+//     * when the token expire, NOTICE THAT: it will refresh the token for 5 minutes
+//     *
+//     * @return int: how long the token will expire.
+//     */
+//    public long tokenExpireTime(String username);
 }

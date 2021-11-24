@@ -47,7 +47,7 @@ public class JwtDaoImpl implements JwtCacheDao {
             }
         }
         else {
-            throw new JwtAuthenticationException("Token not exsist, please login.");
+            throw new JwtAuthenticationException("Token not exist, please login.");
         }
     }
 
@@ -80,9 +80,26 @@ public class JwtDaoImpl implements JwtCacheDao {
         stringRedisTemplate.opsForValue().set(username, token, JWTSetting.JWT_DURATION,JWTSetting.JWT_UNIT);
     }
 
+//    @Override
+//    public long tokenExpireTime(String username) {
+//        if (isTokenExisting(username)){
+//            long expire_time = this.stringRedisTemplate.opsForValue().getOperations().getExpire(username);
+//            if (expire_time < 0){
+//                deleteToken(username);
+//                return -1;
+//            }
+//            refreshToken(username);
+//            return expire_time;
+//
+//        }
+//        return -1;
+//    }
+//
+
     @Autowired
     public void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate) {
         this.stringRedisTemplate = stringRedisTemplate;
     }
+
 
 }

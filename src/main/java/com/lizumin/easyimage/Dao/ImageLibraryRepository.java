@@ -13,13 +13,11 @@ import java.util.List;
 public interface ImageLibraryRepository extends JpaRepository<ImageLibrary,Integer> {
     /**
      *
-     * find all imageLibrary by user id
+     * ind all imageLibrary by username
      *
-     * @param id:  userprofile id
-     * @return java.util.List<com.lizumin.easyimage.model.entity.ImageLibrary> TODO
+     * @param username
+     * @return java.util.List<com.lizumin.easyimage.model.entity.ImageLibrary>
      */
-    List<ImageLibrary> findAllByUserId(long id);
-
-
+    List<ImageLibrary> findAllByUser_Username(String username);
 
 }

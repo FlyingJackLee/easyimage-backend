@@ -26,7 +26,7 @@ public class LabelImage {
     @Column
     private String location;
     @Column
-    private Date takenDate;
+    private Date uploadDate;
 
 
     @ManyToOne
@@ -50,9 +50,6 @@ public class LabelImage {
         return location;
     }
 
-    public Date getTakenDate() {
-        return takenDate;
-    }
 
     public ImageLibrary getImageLibrary() {
         return imageLibrary;
@@ -74,9 +71,6 @@ public class LabelImage {
         this.location = location;
     }
 
-    public void setTakenDate(Date takenDate) {
-        this.takenDate = takenDate;
-    }
 
     public void setImageLibrary(ImageLibrary imageLibrary) {
         this.imageLibrary = imageLibrary;

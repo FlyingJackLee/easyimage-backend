@@ -24,15 +24,17 @@ import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import javax.servlet.Filter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.FilterRegistration;
+import java.util.*;
 
 /**
  * 2 * @Author: Zumin Li
@@ -42,6 +44,29 @@ import java.util.Map;
 @Configuration
 public class ShiroConfig {
     private  UserRepository userRepository;
+
+    @Bean
+    public FilterRegistrationBean<CorsFilter> corsFilterFilterRegistrationBean(){
+        final FilterRegistrationBean<CorsFilter> registrationBean = new FilterRegistrationBean<>(this.corsFilter());
+        registrationBean.setOrder(0);
+
+        return registrationBean;
+    }
+
+
+    private CorsFilter corsFilter() {
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        final CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.setAllowedOrigins(Arrays.asList("http://127.0.0.1:4200"));
+        config.setAllowedHeaders(Arrays.asList("*"));
+        config.setAllowedMethods(Arrays.asList("OPTIONS", "GET", "POST", "PUT", "DELETE"));
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
+
+
+
 
     @Bean
     public ModularRealmAuthenticator modularRealmAuthenticator(){
@@ -69,6 +94,7 @@ public class ShiroConfig {
         securityManager.setSubjectDAO(subjectDAO);
 
         securityManager.setRealms(realms);
+
 
         return securityManager;
 

@@ -33,5 +33,4 @@ public class RestErrorController {
         return RestData.fail(ex.getMessage());
     }
 
-
 }

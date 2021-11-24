@@ -27,4 +27,19 @@ public class ImageLibrary {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public String getLibrary_name() {
+        return library_name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setLibrary_name(String library_name) {
+        this.library_name = library_name;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

@@ -66,4 +66,9 @@ public class JtwUtil {
         }
         return true;
     }
+
+
+    public static String decodeUsername(String token) {
+        return JWT.decode(token).getClaim("username").asString();
+    }
 }
