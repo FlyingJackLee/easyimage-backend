@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
  * 4
  */
 public class JWTSetting {
-   public final static long JWT_DURATION = 10 * 60; //5 mins
+   public final static long JWT_DURATION = 30 * 60; //30 mins
    public final static TimeUnit JWT_UNIT = TimeUnit.SECONDS;
    public final static String TOKEN_HEADER = "Authorization";
 }

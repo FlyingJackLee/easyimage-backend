@@ -14,29 +14,29 @@ import java.util.List;
 public class ImageLibrary {
 
     @Id
-    @Column(name = "id")
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column
-    private String library_name;
+    @Column(unique = true,nullable = false)
+    private String name;
 
-    @OneToMany(mappedBy = "imageLibrary")
-    private List<LabelImage> labelImages;
+//    @OneToMany(mappedBy = "imageLibrary")
+//    private List<LabelImage> labelImages;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    public String getLibrary_name() {
-        return library_name;
+    public String getName() {
+        return name;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setLibrary_name(String library_name) {
-        this.library_name = library_name;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setUser(User user) {

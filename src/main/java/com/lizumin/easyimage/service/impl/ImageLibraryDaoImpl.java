@@ -20,7 +20,7 @@ public class ImageLibraryDaoImpl implements ImageLibraryDao {
     @Override
     public ImageLibrary createLibrary(User user, String name) {
         ImageLibrary imageLibrary = new ImageLibrary();
-        imageLibrary.setLibrary_name(name);
+        imageLibrary.setName(name);
         imageLibrary.setUser(user);
 
         this.imageLibraryRepository.save(imageLibrary);

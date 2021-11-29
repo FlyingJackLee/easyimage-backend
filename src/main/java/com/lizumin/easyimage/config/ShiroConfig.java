@@ -111,9 +111,9 @@ public class ShiroConfig {
         factoryBean.setSecurityManager(securityManager);
 
         Map<String, String> filterRuleMap = new HashMap<>();
+        filterRuleMap.put("/img/**","anno");
         filterRuleMap.put("/**", "jwt");
         filterRuleMap.put("/login", "authc");
-
         return factoryBean;
     }
 

@@ -4,6 +4,7 @@ import com.lizumin.easyimage.constant.enums.ImageState;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,11 +29,17 @@ public class LabelImage {
     @Column
     private Date uploadDate;
 
+    @Column
+    private String name;
+
 
     @ManyToOne
     @JoinColumn(name = "library_id")
     private ImageLibrary imageLibrary;
 
+    @OneToMany(cascade = {CascadeType.ALL},fetch = FetchType.EAGER)
+    @JoinColumn(name = "image_id")
+    private List<Tag> tags;
 
     public Long getId() {
         return id;
@@ -50,6 +57,9 @@ public class LabelImage {
         return location;
     }
 
+    public String getName() {
+        return name;
+    }
 
     public ImageLibrary getImageLibrary() {
         return imageLibrary;
@@ -71,8 +81,24 @@ public class LabelImage {
         this.location = location;
     }
 
+    public void setUploadDate(Date uploadDate) {
+        this.uploadDate = uploadDate;
+    }
 
     public void setImageLibrary(ImageLibrary imageLibrary) {
         this.imageLibrary = imageLibrary;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public Date getUploadDate() {
+        return uploadDate;
+    }
+
 }

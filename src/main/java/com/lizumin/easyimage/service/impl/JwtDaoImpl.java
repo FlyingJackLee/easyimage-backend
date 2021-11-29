@@ -76,8 +76,8 @@ public class JwtDaoImpl implements JwtCacheDao {
 
 
     @Override
-    public void storeJwt(String username, String token) {
-        stringRedisTemplate.opsForValue().set(username, token, JWTSetting.JWT_DURATION,JWTSetting.JWT_UNIT);
+    public void storeJwt(String username, String key) {
+        stringRedisTemplate.opsForValue().set(username, key, JWTSetting.JWT_DURATION,JWTSetting.JWT_UNIT);
     }
 
 //    @Override

@@ -3,8 +3,7 @@ package com.lizumin.easyimage.config.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.*;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import java.util.Date;
@@ -15,7 +14,7 @@ import java.util.Date;
  * 4
  */
 public class JtwUtil {
-    private static final long EXPIRE_TIME = 10*60*1000;
+    private static final long EXPIRE_TIME = 30*60*1000;
     private static final String CLAIM_FILED = "username";
 
     /**
@@ -24,13 +23,13 @@ public class JtwUtil {
      * @return Jwt token
      */
     public static String sign(String key,String username) {
-        Date date = new Date(System.currentTimeMillis()+EXPIRE_TIME);
+//        Date date = new Date(System.currentTimeMillis()+EXPIRE_TIME);
 
         Algorithm algorithm = Algorithm.HMAC256(key);
         // 附带username信息
         return JWT.create()
                 .withClaim(CLAIM_FILED,username )
-                .withExpiresAt(date)
+//                .withExpiresAt(date)
                 .sign(algorithm);
 
     }
@@ -58,11 +57,22 @@ public class JtwUtil {
      * @return boolean
      */
     public static boolean verify(String token,String key) throws JwtAuthenticationException {
-        JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(key)).build();
+
         try {
-            jwtVerifier.verify(token);
-        } catch (JWTVerificationException e) {
-            throw new JwtAuthenticationException("401");
+            Algorithm algorithm = Algorithm.HMAC256(key);
+            JWTVerifier jwtVerifier = JWT.require(algorithm).build();
+            DecodedJWT jwt = jwtVerifier.verify(token);
+
+        } catch (SignatureVerificationException e) {
+            throw new JwtAuthenticationException("the signature is invalid");
+        }
+        catch (TokenExpiredException e){
+            throw new JwtAuthenticationException("The token has expired.");
+
+        }
+        catch (InvalidClaimException e){
+            throw new JwtAuthenticationException("A claim contained a different value than the expected one.");
+
         }
         return true;
     }

@@ -3,6 +3,8 @@ package com.lizumin.easyimage.service.intf;
 import com.lizumin.easyimage.model.entity.ImageLibrary;
 import com.lizumin.easyimage.model.entity.User;
 
+import java.awt.*;
+
 /**
  * 2 * @Author: Zumin Li
  * 3 * @Date: 2021/11/24 8:02 pm
@@ -19,4 +21,5 @@ public interface ImageLibraryDao {
      * @return com.lizumin.easyimage.model.entity.ImageLibrary TODO
      */
     public ImageLibrary createLibrary(User user,String name);
+
 }
