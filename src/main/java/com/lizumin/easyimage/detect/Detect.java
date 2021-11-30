@@ -2,6 +2,7 @@ package com.lizumin.easyimage.detect;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.PropertySource;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -19,8 +20,8 @@ public class Detect {
     final static String[] labels = new String[]{
             "person", "bicycle", "car", "motorcycle", "airplane", "bus", "train", "truck", "boat", "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat", "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella", "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball", "kite", "baseball bat", "baseball glove", "skateboard", "surfboard", "tennis racket", "bottle", "wine glass", "cup", "fork", "knife", "spoon", "bowl", "banana", "apple", "sandwich", "orange", "broccoli", "carrot", "hot dog", "pizza", "donut", "cake", "chair", "couch", "potted plant", "bed", "dining table", "toilet", "tv", "laptop", "mouse", "remote", "keyboard", "cell phone", "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors", "teddy bear", "hair drier", "toothbrush"
     };
-    final static String yoloEnv = "/Users/jack/OneDrive/UofGlasgow_Files/project/code/yolov3";
-    final static String pythonEnv = "/Users/jack/opt/anaconda3/envs/yolo3/bin/python";
+    final static String yoloEnv = "/home/jack/web/yolov3";
+    final static String pythonEnv = "/home/jack/anaconda3/envs/yolo3/bin/python";
 
     public static List<String> detect(String imagePath) {
         return detect(yoloEnv,pythonEnv,imagePath);

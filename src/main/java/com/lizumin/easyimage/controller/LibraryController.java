@@ -136,7 +136,7 @@ public class LibraryController {
         labelImage.setFilePath(fileName);
         labelImage.setState(ImageState.WAITING);
         labelImage.setUploadDate(new Date());
-        System.out.println(Arrays.toString(multipartFile.getOriginalFilename().split("\\.")));
+
         labelImage.setName(multipartFile.getOriginalFilename().split("\\.")[0]);
         labelImage.setImageLibrary(this.imageLibraryRepository.findImageLibraryByName(library_name));
         this.imageRepository.save(labelImage);
