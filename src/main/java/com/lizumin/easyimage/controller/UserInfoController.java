@@ -38,7 +38,6 @@ import java.util.Locale;
  * 4
  */
 @RestController
-@CrossOrigin(origins = "http://127.0.0.1:4200", maxAge = 3600)
 @RequestMapping(path = "/api/user")
 public class UserInfoController {
     private UserRepository userRepository;

@@ -1,6 +1,7 @@
 package com.lizumin.easyimage.Dao;
 
 import com.lizumin.easyimage.model.entity.ImageLibrary;
+import com.lizumin.easyimage.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
@@ -17,10 +18,10 @@ public interface ImageLibraryRepository extends JpaRepository<ImageLibrary,Integ
      *
      * find all imageLibrary by username
      *
-     * @param username
+     * @param user
      * @return java.util.List<com.lizumin.easyimage.model.entity.ImageLibrary>
      */
-    List<ImageLibrary> findAllByUser_Username(String username);
+    List<ImageLibrary> findImageLibrariesByUser(User user);
 
     /**
      *
@@ -29,6 +30,16 @@ public interface ImageLibraryRepository extends JpaRepository<ImageLibrary,Integ
      * @param libraryname:
      * @return com.lizumin.easyimage.model.entity.ImageLibrary TODO
      */
-    ImageLibrary findImageLibraryByName(String libraryname);
+    ImageLibrary findImageLibraryByNameAndUser(String libraryname,User user);
+
+    /**
+     *
+     * find all image libraries by libraryname
+     *
+     * @param libraryname
+     * @return java.util.List<com.lizumin.easyimage.model.entity.ImageLibrary> TODO
+     */
+    List<ImageLibrary> findImageLibrariesByName(String libraryname);
+
 
 }
