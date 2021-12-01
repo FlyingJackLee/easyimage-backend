@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.lizumin</groupId>
     <artifactId>EasyImage</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>v1.0.1</version>
     <name>EasyImage</name>
     <description>EasyImage</description>
     <properties>
@@ -107,7 +107,6 @@
     <build>
         <plugins>
             <plugin>
-
                 <groupId>org.asciidoctor</groupId>
                 <artifactId>asciidoctor-maven-plugin</artifactId>
                 <version>1.5.8</version>
@@ -145,11 +144,9 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
         </plugins>
+
+        <finalName>${project.artifactId}-${project.version}</finalName>
     </build>
 
 </project>

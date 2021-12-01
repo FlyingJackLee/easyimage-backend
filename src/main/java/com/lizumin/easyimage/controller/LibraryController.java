@@ -14,12 +14,12 @@ import com.lizumin.easyimage.model.entity.LabelImage;
 import com.lizumin.easyimage.model.entity.Tag;
 import com.lizumin.easyimage.model.entity.User;
 import com.lizumin.easyimage.service.intf.ImageLibraryDao;
-import com.lizumin.easyimage.utils.PathUtil;
 import com.lizumin.easyimage.utils.RandomUtil;
 import com.lizumin.easyimage.utils.RestDataUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -40,10 +39,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 
 @RestController
-@CrossOrigin(value = "http://127.0.0.1:4200", maxAge = 3600)
 @RequestMapping(path = "/api/library")
 public class LibraryController {
-    private String UPLOAD_PATH = PathUtil.imagesStorePath();
+
+    private Environment env;
+
     private String DEFAULT_COVER =  "default.jpg";
 
     private ObjectMapper mapper = new ObjectMapper();
@@ -59,11 +59,23 @@ public class LibraryController {
     @RequiredJwtToken
     public @ResponseBody RestData listAllLibrary
             (@RequestHeader(value = JWTSetting.TOKEN_HEADER,required = true) String token){
+
         String username = JtwUtil.getUsername(token);
+
+        this.logger.debug("Search library username:" + username);
 
         RestData restData = RestData.success("fetch success");
 
-        List<ImageLibrary> imageLibraries = this.imageLibraryRepository.findAllByUser_Username(username);
+        User user = this.userRepository.findUserByUsername(username);
+        if (user == null){
+            return RestData.fail("cannot find this user");
+        }
+
+        List<ImageLibrary> imageLibraries = this.imageLibraryRepository.findImageLibrariesByUser(user);
+
+        if (imageLibraries.size() <= 0){
+            return RestData.fail("cannot find a library");
+        }
 
         imageLibraries.forEach(
                 imageLibrary -> {
@@ -82,19 +94,18 @@ public class LibraryController {
             (       @RequestHeader(value = JWTSetting.TOKEN_HEADER,required = true) String token,
                     @RequestBody(required = true) RestData requestData ){
         String libraryName = RestDataUtil.getKeyData(requestData,"library_name");
+        String username = JtwUtil.getUsername(token);
 
         if (libraryName == null || "".equals(libraryName)){
             return RestData.fail("Blank library name!");
         }
 
-        if (this.imageLibraryRepository.findImageLibraryByName(libraryName) != null){
+        if (this.imageLibraryDao.getLibraryByUsernameAndLibraryname(username,libraryName) != null){
             return RestData.fail("Library Exist!");
         }
 
-        String username = JtwUtil.getUsername(token);
-        User user = this.userRepository.findUserByUsername(username);
+        ImageLibrary imageLibrary = this.imageLibraryDao.createLibrary(username,libraryName);
 
-        ImageLibrary imageLibrary = this.imageLibraryDao.createLibrary(user,libraryName);
         RestData res = RestData.success("success");
         res.add(String.valueOf(imageLibrary.getId()),imageLibrary.getName());
         return res;
@@ -115,7 +126,7 @@ public class LibraryController {
         String fileSuffix = Objects.requireNonNull(multipartFile.getOriginalFilename()).contains("jpg") ? ".jpg" : ".png";
 
         String fileName =  System.currentTimeMillis() + RandomUtil.getRandomString(5) + fileSuffix;
-        String abStrPath = UPLOAD_PATH + fileName;
+        String abStrPath = this.env.getProperty("image.save.path") + fileName;
 
 
         try {
@@ -138,7 +149,8 @@ public class LibraryController {
         labelImage.setUploadDate(new Date());
 
         labelImage.setName(multipartFile.getOriginalFilename().split("\\.")[0]);
-        labelImage.setImageLibrary(this.imageLibraryRepository.findImageLibraryByName(library_name));
+        labelImage.setImageLibrary(this.imageLibraryDao.getLibraryByUsernameAndLibraryname(JtwUtil.getUsername(token),library_name));
+
         this.imageRepository.save(labelImage);
 
         return RestData.success("Save Success");
@@ -232,5 +244,10 @@ public class LibraryController {
     @Autowired
     public void setTagRepository(ImageTagRepository tagRepository) {
         this.tagRepository = tagRepository;
+    }
+
+    @Autowired
+    public void setEnv(Environment env) {
+        this.env = env;
     }
 }

@@ -10,14 +10,14 @@ import java.util.List;
  * 4
  */
 @Entity
-@Table
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"user_id","library_name"}))
 public class ImageLibrary {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(unique = true,nullable = false)
+    @Column(name = "library_name")
     private String name;
 
 //    @OneToMany(mappedBy = "imageLibrary")
@@ -31,15 +31,15 @@ public class ImageLibrary {
         return name;
     }
 
-    public Long getId() {
-        return id;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

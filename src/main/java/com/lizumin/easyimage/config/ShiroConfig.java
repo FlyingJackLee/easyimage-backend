@@ -28,6 +28,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.core.env.Environment;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -45,6 +46,8 @@ import java.util.*;
 public class ShiroConfig {
     private  UserRepository userRepository;
 
+    private Environment environment;
+
     @Bean
     public FilterRegistrationBean<CorsFilter> corsFilterFilterRegistrationBean(){
         final FilterRegistrationBean<CorsFilter> registrationBean = new FilterRegistrationBean<>(this.corsFilter());
@@ -58,7 +61,7 @@ public class ShiroConfig {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         final CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(Arrays.asList("http://127.0.0.1:4200"));
+        config.setAllowedOrigins(Arrays.asList(this.environment.getProperty("cors.domain")));
         config.setAllowedHeaders(Arrays.asList("*"));
         config.setAllowedMethods(Arrays.asList("OPTIONS", "GET", "POST", "PUT", "DELETE"));
         source.registerCorsConfiguration("/**", config);
@@ -166,9 +169,12 @@ public class ShiroConfig {
         return new ModularRealmAuthorizer();
     }
 
+    @Autowired
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
+    }
 
-
-//    @Bean
+    //    @Bean
 //    public ShiroFilterChainDefinition shiroFilterChainDefinition() {
 //        DefaultShiroFilterChainDefinition chainDefinition = new DefaultShiroFilterChainDefinition();
 //        chainDefinition.addPathDefinition("/**", "anon"); // all paths are managed via annotations
