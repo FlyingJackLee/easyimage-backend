@@ -32,14 +32,4 @@ public interface ImageLibraryRepository extends JpaRepository<ImageLibrary,Integ
      */
     ImageLibrary findImageLibraryByNameAndUser(String libraryname,User user);
 
-    /**
-     *
-     * find all image libraries by libraryname
-     *
-     * @param libraryname
-     * @return java.util.List<com.lizumin.easyimage.model.entity.ImageLibrary> TODO
-     */
-    List<ImageLibrary> findImageLibrariesByName(String libraryname);
-
-
 }

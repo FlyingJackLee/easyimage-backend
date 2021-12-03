@@ -1,5 +1,8 @@
 package com.lizumin.easyimage.controller;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +16,11 @@ public class RestData {
     private String message;
     private Map<String,Object> data = new HashMap<>();
 
-    private RestData(int code, String message){
+    public RestData(){
+
+    }
+
+    public RestData(int code, String message){
         this.code = code;
         this.message = message;
     }

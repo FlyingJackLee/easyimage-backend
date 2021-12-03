@@ -69,8 +69,6 @@ public class ShiroConfig {
     }
 
 
-
-
     @Bean
     public ModularRealmAuthenticator modularRealmAuthenticator(){
         CustomModularRealmAuthenticator authenticator = new CustomModularRealmAuthenticator();

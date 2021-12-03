@@ -67,7 +67,7 @@ public class JwtDaoImpl implements JwtCacheDao {
     }
 
     @Override
-    public String getSecrectKey(String username) {
+    public String getSecretKey(String username) {
         if (isTokenExisting(username)){
            return stringRedisTemplate.opsForValue().get(username);
         }

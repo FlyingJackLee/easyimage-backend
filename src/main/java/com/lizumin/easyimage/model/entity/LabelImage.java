@@ -3,6 +3,7 @@ package com.lizumin.easyimage.model.entity;
 import com.lizumin.easyimage.constant.enums.ImageState;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -100,5 +101,6 @@ public class LabelImage {
     public Date getUploadDate() {
         return uploadDate;
     }
+
 
 }

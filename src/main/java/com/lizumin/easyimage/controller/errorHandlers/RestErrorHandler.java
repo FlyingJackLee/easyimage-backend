@@ -1,6 +1,7 @@
-package com.lizumin.easyimage.controller;
+package com.lizumin.easyimage.controller.errorHandlers;
 
 import com.lizumin.easyimage.config.jwt.JwtAuthenticationException;
+import com.lizumin.easyimage.controller.RestData;
 import org.apache.shiro.ShiroException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
  * 4
  */
 @RestControllerAdvice
-public class RestErrorController {
+public class RestErrorHandler {
 
     @ExceptionHandler(ShiroException.class)
     public RestData handle401(ShiroException e) {

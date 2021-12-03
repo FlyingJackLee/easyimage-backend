@@ -40,9 +40,13 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 
         JtwToken token = new JtwToken(authorization);
 
-        //give the token to the jwt realm
-        getSubject(request,response).login(token);
-
+        try {
+            //give the token to the jwt realm
+            getSubject(request,response).login(token);
+        }
+        catch (RuntimeException exception){
+            throw exception;
+        }
 
         //if no Exception throws in the last login
         return true;
