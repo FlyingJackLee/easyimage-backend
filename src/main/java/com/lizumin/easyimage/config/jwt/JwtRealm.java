@@ -67,22 +67,25 @@ public class JwtRealm extends AuthorizingRealm {
 
 
         if (username ==null || "".equals(username)){
-            throw new JwtAuthenticationException("Invalid token.");
+            throw new AuthenticationException("Invalid token.");
+//            throw new JwtAuthenticationException("Invalid token.");
         }
 
         //check if there is a jwt token cache relating to the user.
         if (jwtCacheDao.isJwtTokenAvailable(username)){
-            String key = jwtCacheDao.getSecrectKey(username);
+            String key = jwtCacheDao.getSecretKey(username);
             if (JtwUtil.verify(jwtToken,key)){
                 this.jwtCacheDao.refreshToken(username);
                 return new SimpleAuthenticationInfo(username,jwtToken,getName());
            }
            else {
-                throw new JwtAuthenticationException("Bad Authentication.");
+                throw new AuthenticationException("Bad Authentication.");
+//                throw new JwtAuthenticationException("Bad Authentication.");
             }
         }
         else {
-            throw new JwtAuthenticationException("No Authentication, please login.");
+            throw new AuthenticationException("No Authentication, please login.");
+            //throw new JwtAuthenticationException("No Authentication, please login.");
         }
     }
 

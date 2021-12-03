@@ -1,7 +1,5 @@
 package com.lizumin.easyimage.service.intf;
 
-import java.util.Date;
-
 /**
  * 2 * @Author: Zumin Li
  * 3 * @Date: 2021/11/17 2:16 am
@@ -44,7 +42,7 @@ public interface JwtCacheDao {
      * @param  username
      * @return String: the secret key realting to the user
      */
-    public String getSecrectKey(String username);
+    public String getSecretKey(String username);
 
     /**
      *
@@ -52,7 +50,7 @@ public interface JwtCacheDao {
      *
      * @param  username
      */
-    public void storeJwt(String username,String token);
+    public void storeJwt(String username,String key);
 
 //    /**
 //     *

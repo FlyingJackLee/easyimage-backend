@@ -1,6 +1,7 @@
-package com.lizumin.easyimage.controller;
+package com.lizumin.easyimage.controller.errorHandlers;
 
 import com.lizumin.easyimage.config.jwt.JwtAuthenticationException;
+import com.lizumin.easyimage.controller.RestData;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -10,9 +11,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  * 4
  */
 @ControllerAdvice
-public class ErrorController {
+public class GlobalErrorHandler {
     @ExceptionHandler(JwtAuthenticationException.class)
     public RestData jwtExceptionHandler(JwtAuthenticationException e){
         return e.getRestData();
     }
+
 }

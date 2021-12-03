@@ -51,9 +51,9 @@ public class UserDaoImpl implements UserDao {
             user.setLocale(Locale.ENGLISH);
         }
 
-        userRepository.save(user);
+        return userRepository.save(user);
 
-        return user;
+//        return user;
 
     }
 

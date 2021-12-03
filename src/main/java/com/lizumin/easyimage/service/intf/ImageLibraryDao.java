@@ -32,4 +32,5 @@ public interface ImageLibraryDao {
      * @return com.lizumin.easyimage.model.entity.ImageLibrary TODO
      */
     public ImageLibrary getLibraryByUsernameAndLibraryname(String username,String libraryname);
+
 }

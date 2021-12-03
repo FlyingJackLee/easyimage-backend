@@ -1,35 +1,25 @@
 package com.lizumin.easyimage.controller;
 
-import com.auth0.jwt.JWT;
 import com.lizumin.easyimage.Dao.UserRepository;
 import com.lizumin.easyimage.annos.RequiredJwtToken;
-import com.lizumin.easyimage.config.jwt.JtwToken;
 import com.lizumin.easyimage.config.jwt.JtwUtil;
-import com.lizumin.easyimage.config.jwt.JwtAuthenticationException;
 import com.lizumin.easyimage.constant.enums.JWTSetting;
 import com.lizumin.easyimage.model.entity.User;
 
 
-import com.lizumin.easyimage.service.impl.JwtDaoImpl;
 import com.lizumin.easyimage.service.intf.JwtCacheDao;
 import com.lizumin.easyimage.service.intf.UserDao;
 import com.lizumin.easyimage.utils.RandomUtil;
 import com.lizumin.easyimage.utils.RestDataUtil;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
-import net.bytebuddy.utility.RandomString;
-import org.apache.catalina.security.SecurityUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import javax.crypto.KeyGenerator;
 import java.util.Locale;
 
 /**
@@ -49,7 +39,7 @@ public class UserInfoController {
             "Register a new user by username,password amd EMail. " +
                     "Also, locale filed, which is not a required filed(default is EN) , points out the locale of the user")
     @PostMapping("/signup")
-    public  @ResponseBody RestData createAccount
+    public @ResponseBody RestData createAccount
             (@RequestBody(required = true) RestData requestData){
 
         String username = RestDataUtil.getKeyData(requestData,"username");
@@ -108,9 +98,9 @@ public class UserInfoController {
         }
 
         //Prevent malicious logout, check token before logout
-        if (JtwUtil.verify(token,this.jwtCacheDao.getSecrectKey(username))){
+        if (JtwUtil.verify(token,this.jwtCacheDao.getSecretKey(username))){
             this.jwtCacheDao.deleteToken(username);
-            return RestData.success("you have logged out");
+            return RestData.success("You have logged out");
         }
         else {
             return RestData.fail("Bad token.");

@@ -119,7 +119,6 @@ public class LibraryController {
             @RequestParam("library_name") String library_name
 
     ){
-
         if (multipartFile.isEmpty()){
             throw new RestfulException("no file");
         }
@@ -159,7 +158,7 @@ public class LibraryController {
 
     @GetMapping("/images")
     @RequiredJwtToken
-    public @ResponseBody RestData uploadImage(
+    public @ResponseBody RestData listImages(
             @RequestHeader(value = JWTSetting.TOKEN_HEADER,required = true) String token,
             @RequestParam("library_name") String library_name
     ){
@@ -183,7 +182,7 @@ public class LibraryController {
 
     @PostMapping("/tag")
     @RequiredJwtToken
-    public @ResponseBody RestData uploadImage(
+    public @ResponseBody RestData addTag(
             @RequestHeader(value = JWTSetting.TOKEN_HEADER,required = true) String token,
             @RequestBody(required = true) RestData requestData
     ){
@@ -202,7 +201,7 @@ public class LibraryController {
 
         AtomicBoolean hasExist = new AtomicBoolean(false);
         labelImage.getTags().forEach( (Tag t) ->{
-            if (t.getType().equals("tag")){
+            if (t.getType().equals(tag)){
                 hasExist.set(true);
             }
         });
