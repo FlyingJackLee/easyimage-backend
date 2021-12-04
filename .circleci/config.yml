@@ -10,7 +10,8 @@ jobs:
       - image: circleci/redis:6.0-alpine3.15
     steps:
       - checkout
-          
+      - run: redis-server --daemonize yes
+
 orbs:
   maven: circleci/maven@1.2.0
 
