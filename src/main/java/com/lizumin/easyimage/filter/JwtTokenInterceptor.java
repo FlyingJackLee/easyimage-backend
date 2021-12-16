@@ -55,7 +55,7 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
 
             if (currentUser.isAuthenticated()){
                 return true;
-            }
+            } 
             else {
                 throw new JwtAuthenticationException("Authenticate fail.");
             }

@@ -10,12 +10,34 @@
     </parent>
     <groupId>com.lizumin</groupId>
     <artifactId>EasyImage</artifactId>
-    <version>v1.0.1</version>
+    <version>v1.2.0</version>
     <name>EasyImage</name>
     <description>EasyImage</description>
     <properties>
         <java.version>11</java.version>
     </properties>
+    <profiles>
+        <!-- dev -->
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <profileActive>dev</profileActive>
+            </properties>
+        </profile>
+        <!-- dev -->
+        <profile>
+            <id>prod</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <profileActive>prod</profileActive>
+            </properties>
+        </profile>
+    </profiles>
     <dependencies>
         <dependency>
             <groupId>com.h2database</groupId>

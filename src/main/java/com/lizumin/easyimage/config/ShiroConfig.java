@@ -4,6 +4,7 @@ import com.lizumin.easyimage.Dao.UserRepository;
 import com.lizumin.easyimage.config.jwt.CustomModularRealmAuthenticator;
 import com.lizumin.easyimage.config.jwt.JwtFilter;
 import com.lizumin.easyimage.config.jwt.JwtRealm;
+import com.lizumin.easyimage.detect.DetectScheduledTask;
 import org.apache.shiro.authc.Authenticator;
 import org.apache.shiro.authc.credential.DefaultPasswordService;
 import org.apache.shiro.authc.credential.PasswordMatcher;
@@ -22,6 +23,8 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
 import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -44,6 +47,8 @@ import java.util.*;
  */
 @Configuration
 public class ShiroConfig {
+    private final static Logger logger = LoggerFactory.getLogger(ShiroConfig.class);
+
     private  UserRepository userRepository;
 
     private Environment environment;
@@ -62,6 +67,7 @@ public class ShiroConfig {
         final CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.setAllowedOrigins(Arrays.asList(this.environment.getProperty("cors.domain")));
+        logger.info("set cors domain " + this.environment.getProperty("cors.domain"));
         config.setAllowedHeaders(Arrays.asList("*"));
         config.setAllowedMethods(Arrays.asList("OPTIONS", "GET", "POST", "PUT", "DELETE"));
         source.registerCorsConfiguration("/**", config);
